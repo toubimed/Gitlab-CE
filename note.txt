@@ -1,0 +1,78 @@
+GitLab is an open-source tool that provides support for teams to plan, develop, test, build,
+deploy, monitor, and publicize their software projects, covering the entire Software Development
+Life Cycle (SDLC) in only one tool.
+
+DDNS (Dynamic Domain Name System): is a method of automatically updating a name server
+in the Domain Name Server (DNS), often in real time,
+
+Gitlab runner: gitlab runner instance communicate with gitlab and get tasks to run, like building,
+testing, and deploy of our application.
+
+In Gitlab we can add users, can create group, projects and issues, the can commit and push code into
+project, comment in issue
+
+groups in gitlab are used to organise project that are related to each other.
+
+lables are used to categorize issues and merge request
+
+you can use label "bug" to categorize an issue occured in production envirenement
+or use labels "dev", "QA", "prod" to categorize which specific stage
+there are two type of lable: project label and group label.
+issue: play a central rol in gitlab
+issue used to register a new idea and feature, changes that most be performed in the software,
+technical discussion and bug.
+
+with issue template the issues become standarzied and all the information
+the developement team needed
+we have to create un md file inside .gitlab/issue_templates folder in our project
+
+Milestones in GitLab are a way to track issues and merge requests created to achieve a
+broader goal in a certain period of time.
+Milestones as Agile sprints.
+Milestones as releases.
+
+Issue broad Increase the project status and visibility
+shows all issues related to the project
+shows the status of each issue
+show what are doing every person of team
+
+in gitlab we can impliment CI/CD using pipelines
+pipelines are a set of jobs (or tasks) excuted in a predefined order
+these jobs are organised in stages
+jobs in the same stage are executed in parallel
+
+Continious Deployement: its a developement practise to deploy automatically the projects
+on production envirenement after succes buildin and passing automated with success
+
+Deployement is the process of making an application available in any specific envirenement
+
+ssh-keyscan is a utility for gathering the public ssh host keys of a number of hosts.
+
+cycle Analytics gitlab: can answer how long each stage in the process takes
+how long the total process takes as well as how much time you spend in each stage.
+Cycle Analytics tracks the median time it takes your team to complete every stage in
+the modern development process.
+
+With GitLab Snippets you can store and share bits of code and text with other users.
+the are two type of Snippets:
+personal Snippets:Personal snippets are not related to any project and can be created completely
+independently. There are 3 visibility levels that can be set, public, internal and private
+project Snippets:Project snippets are always related to a specific project.
+
+Levels of testing:
+Syntax testing and linting : testing the Syntax of your code
+Unit ans integration testing : test one fuction and integration test a feature
+Acceptance testing : similar to integration test the mean differance is simulate
+ in envirenement similar to production envirenement
+
+jekyll its a static web generateur
+ docker run --rm \
+  --volume="$PWD:/srv/jekyll" \
+  -it jekyll/jekyll:$JEKYLL_VERSION \
+  jekyll new blog
+
+envirenement its a standalone hardware and software stack capable of running your entire
+application and its configured for a specific prupose : Dev, QA, staging and production
+
+Gitlab pages its a way to publish static-sites
+static-sites very useful to create project documentation, blogs, project pages
