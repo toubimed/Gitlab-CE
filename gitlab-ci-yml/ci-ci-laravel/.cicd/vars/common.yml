@@ -1,0 +1,11 @@
+---
+project_name: kaza-immo
+deploy_user: kaza-immo
+deploy_uid: 100036
+web_user: kaza-immo
+document_root: "/home/{{ deploy_user }}/"
+php_version: 7.3
+kaza-immo_allowed_hosts: '10.13.5.23'
+kaza-immo_database_user: kaza-immo
+kaza-immo_database_password: '4uJ9i3GwQd2'
+kaza-immo_database: kaza-immo

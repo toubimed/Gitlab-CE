@@ -1,0 +1,38 @@
+---
+  - hosts: php
+    remote_user: root
+    tasks:
+      - name: Syncing Application
+        synchronize:
+          src: /stage/kaza-immo/
+          dest: /home/kaza-immo/public
+          delete: yes
+          recursive: yes
+          rsync_opts:
+            - "--exclude=.cicd"
+            - "--exclude=.git"
+            - "--exclude=.gitlab-ci.yml"
+            - "--exclude=.gitignore"
+
+      - name: Syncing Environment Configurations
+        synchronize:
+          src: "/stage/kaza-immo/.cicd/vars/dev/.env"
+          dest: /home/kaza-immo/.env
+
+      - name: Fix root permissions
+        shell: "chown -R kaza-immo:kaza-immo /home/kaza-immo; chmod a+x /home/kaza-immo/.env"
+
+      - name: Generate API key
+        shell: "su kaza-immo -c '/usr/bin/php7.3 /home/kaza-immo/artisan  key:generate'"
+
+      - name: Database Migration
+        shell: "su careers -c '/usr/bin/php7.3 /home/kaza-immo/artisan migrate'"
+
+      - name: Create Storage link
+        shell: "su careers -c '/usr/bin/php7.3 /home/kaza-immo/artisan storage:link'"
+
+      - name: Fix root permissions
+        shell: "chown -R kaza-immo:kaza-immo /home/kaza-immo/"
+
+      - name: fix storage permissions
+        shell: "chown -R kaza-immo:kaza-immo /home/kaza-immo/storage; chmod -R 766 /home/kaza-immo/storage"

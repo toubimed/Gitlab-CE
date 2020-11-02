@@ -1,0 +1,43 @@
+# HTTP Support
+<VirtualHost *:80>
+        ServerName  kaza-immo.dev.pulse.digital
+        ServerAlias kaza-immo.dev.pulse.digital
+
+        DocumentRoot /home/kaza-immo/public
+        <Directory /home/kaza-immo/public>
+                Options FollowSymLinks
+                AllowOverride All
+                DirectoryIndex index.php index.html
+                Require all granted
+       </Directory>
+       <FilesMatch \.php$>
+                SetHandler "proxy:unix:/run/php/php7.3-fpm.sock|fcgi://localhost/"
+        </FilesMatch>
+
+
+</VirtualHost>
+
+# HTTPS Support
+<VirtualHost *:443>
+        ServerName kaza-immo.dev.pulse.digital
+        ServerAlias kaza-immo.dev.pulse.digital
+
+        SSLEngine on
+
+        # SAN Certificates. Recommended when using Chrome
+        SSLCertificateFile /etc/ssl/certs/ssl-cert-snakeoil.pem
+        SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
+
+        DocumentRoot /home/kaza-immo/public
+        <Directory /home/kaza-immo/public>
+                Options FollowSymLinks
+                AllowOverride All
+                DirectoryIndex index.php index.html
+                Require all granted
+        </Directory>
+
+       <FilesMatch \.php$>
+                SetHandler "proxy:unix:/run/php/php7.3-fpm.sock|fcgi://localhost/"
+        </FilesMatch>
+
+</VirtualHost>

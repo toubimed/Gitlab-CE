@@ -1,0 +1,68 @@
+---
+  - hosts: mysql,php
+    remote_user: root
+    vars:
+            - command_warnings: False
+    tasks:
+            - name: Include Common variables
+              include_vars: "./vars/dev/common.yml"
+            - name: Include Stage-specific variables
+              include_vars: "./vars/dev/.env"
+
+  - hosts: php
+    remote_user: root
+    vars:
+     - command_warnings: False
+    tasks:
+            - name: add group for "{{ deploy_user }}"
+              group:
+                name: "{{ deploy_user }}"
+                state: present
+
+            - name: Create user for "{{ deploy_user }}"
+              user:
+                name: "{{ deploy_user }}"
+                group: "{{ deploy_user }}"
+                create_home: yes
+                home: "/home/{{ deploy_user }}/"
+
+            - name: add "{{ deploy_user }}" to group www-data
+              shell: "usermod -a -G {{ deploy_user }} www-data"
+
+            - name: Create virtualhost for "{{ deploy_user }}"
+              template:
+                src: ../templates/app.conf.j2
+                dest: /etc/apache2/sites-available/app.conf
+                owner: "{{ deploy_user }}"
+                group: "{{ deploy_user }}"
+                mode: '0766'
+
+            - name: enable careers virtualhost
+              file:
+                src: /etc/apache2/sites-available/app.conf
+                dest: /etc/apache2/sites-enabled/app.conf
+                state: link
+
+    handlers:
+            - name: restart apache web server
+              service:
+                      name: apache2
+                      state: restarted
+
+  - hosts: mysql
+    remote_user: root
+    vars:
+      - command_warnings: False
+    tasks:
+      - name: Create a database for "{{ deploy_user }}"
+        mysql_db:
+          name: "{{ app_database }}"
+          state: present
+
+      - name: Create a database user for app
+        mysql_user:
+          name: "{{ app_database_user }}"
+          password: "{{ app_database_password }}"
+          host: "{{ item }}"
+          priv: "{{ app_database }}.*:ALL"
+        with_items: "{{ app_allowed_hosts }}"

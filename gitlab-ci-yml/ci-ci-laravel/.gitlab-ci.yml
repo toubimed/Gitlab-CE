@@ -1,0 +1,33 @@
+stages:
+  - configuration
+  - build
+  - deploy
+
+configuration:staging:
+  stage: configuration
+  script:
+    - ansible-playbook -i /etc/ansible/environments/dev .cicd/main.yml
+  when: manual
+  tags:
+    - php
+
+build:staging:
+  stage: build
+  script:
+    - /usr/bin/php7.3 /usr/local/bin/composer install
+    - npm install
+    - CI=false npm run staging
+    - mkdir -p /opt/app
+    - rsync -a --delete ./ /apt/app
+    - ansible-playbook -i /etc/ansible/environments/dev .cicd/sync.yml
+  tags:
+    - php
+
+deploy:staging:
+  stage: deploy
+  script:
+    - ansible-playbook -i /etc/ansible/environments/prod .cicd/sync.yml
+  except:
+    - master
+  environement:
+    name: staging
